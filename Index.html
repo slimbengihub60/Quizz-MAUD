@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les 50 ans de Maud - Quiz Grease Premium</title>
+    <style>
+        /* BASE & RESET HORS-LIGNE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0b030a;
+            background-image: radial-gradient(circle at center, #2d1227 0%, #0b030a 100%);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            padding: 12px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Classes Utilitaires */
+        .hidden {
+            display: none !important;
+        }
+
+        /* EN-TÊTE */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 64, 129, 0.5);
+            border-radius: 16px;
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.3), inset 0 0 15px rgba(255, 64, 129, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 20;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Vinyle Interactif */
+        .vinyl-container {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            animation: vinyl-spin 6s linear infinite;
+        }
+
+        .vinyl-body {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #171717;
+            border: 1px solid #262626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vinyl-grooves-1 {
+            position: absolute;
+            inset: 5px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .vinyl-grooves-2 {
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .vinyl-center {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff4081;
+            border: 1px solid #ff4081;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vinyl-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Le secours est masqué par défaut */
+        .vinyl-fallback {
+            display: none !important;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff4081, #6b21a8);
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 900;
+            color: white;
+        }
+
+        /* En cas d'erreur de chargement de l'image du vinyle */
+        .vinyl-center.has-error .vinyl-img {
+            display: none !important;
+        }
+        .vinyl-center.has-error .vinyl-fallback {
+            display: flex !important;
+        }
+
+        .vinyl-hole {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #1a0b16;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-title-box h1 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #ff4081;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .header-subtitle {
+            font-size: 0.7rem;
+            color: #f9a8d4;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 768px) {
+            .header-title-box h1 { font-size: 1.5rem; }
+            .header-subtitle { font-size: 0.8rem; }
+        }
+
+        /* Bouton Plein Écran */
+        .btn-fullscreen {
+            background: linear-gradient(to right, #ff4081, #be185d);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(255, 64, 129, 0.4);
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 30;
+        }
+
+        .btn-fullscreen:hover {
+            transform: scale(1.05);
+        }
+
+        /* ÉCRAN D'ACCUEIL */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            text-align: center;
+            padding: 12px;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* POLAROID VINTAGE */
+        .polaroid-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+            animation: polaroid-float 4s ease-in-out infinite alternate;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid-wrapper:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+
+        .polaroid-card {
+            background: #ffffff;
+            padding: 12px;
+            padding-bottom: 28px;
+            border-radius: 2px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            border: 1px solid #e5e5e5;
+            width: 210px;
+        }
+
+        @media (min-width: 768px) {
+            .polaroid-card { width: 250px; }
+        }
+
+        .polaroid-image-area {
+            position: relative;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            background: #171717;
+            border: 1px solid rgba(0,0,0,0.15);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.02) saturate(1.05);
+            display: block;
+        }
+
+        /* Secours masqué par défaut */
+        .polaroid-fallback {
+            display: none !important;
+            position: absolute;
+            inset: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #db2777, #6b21a8);
+            padding: 12px;
+        }
+
+        /* En cas d'erreur de chargement de la photo principale */
+        .polaroid-image-area.has-error .polaroid-img {
+            display: none !important;
+        }
+        .polaroid-image-area.has-error .polaroid-fallback {
+            display: flex !important;
+        }
+
+        .polaroid-fallback-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 6px;
+        }
+
+        .polaroid-fallback-name {
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .polaroid-caption {
+            margin-top: 12px;
+            text-align: center;
+            color: #262626;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-family: 'Brush Script MT', 'Comic Sans MS', cursive;
+        }
+
+        /* Scotch Déco */
+        .polaroid-tape {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(2deg);
+            width: 90px;
+            height: 24px;
+            background: rgba(255, 64, 129, 0.25);
+            backdrop-filter: blur(2px);
+            border-left: 1px dashed rgba(255, 64, 129, 0.5);
+            border-right: 1px dashed rgba(255, 64, 129, 0.5);
+        }
+
+        /* Titres accueil */
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00e5ff;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            margin-bottom: 4px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.05rem;
+            color: #ff4081;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        @media (min-width: 768px) {
+            .welcome-title { font-size: 3rem; }
+            .welcome-subtitle { font-size: 1.3rem; }
+        }
+
+        /* Gros Bouton d'action */
+        .btn-primary {
+            background: linear-gradient(to right, #00e5ff, #2563eb);
+            color: #0b030a;
+            font-weight: 900;
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            border-radius: 9999px;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 30;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.7);
+        }
+
+        /* ZONE DE JEU (QUIZ) */
+        #quiz-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-grow: 1;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Progression */
+        .progress-box {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #f9a8d4;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar-bg {
+            width: 50%;
+            height: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 9999px;
+            padding: 2px;
+            border: 1px solid rgba(255, 64, 129, 0.3);
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .progress-bar-bg { width: 66%; }
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, #ff4081, #ec4899);
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+
+        /* Question */
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 16px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.3;
+        }
+
+        @media (min-width: 768px) {
+            .question-text { font-size: 1.6rem; min-height: 90px; }
+        }
+
+        /* Grille des réponses */
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .answers-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        /* Boutons Réponses */
+        .btn-answer {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 900;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 30;
+        }
+
+        @media (min-width: 768px) {
+            .btn-answer {
+                font-size: 1.25rem;
+                min-height: 96px;
+                padding: 18px;
+            }
+        }
+
+        .btn-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .btn-green { background: linear-gradient(135deg, #10b981, #047857); }
+        .btn-red { background: linear-gradient(135deg, #f43f5e, #be123c); }
+        .btn-yellow { 
+            background: linear-gradient(135deg, #fcd34d, #f59e0b); 
+            color: #0b030a; 
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Zoom de la bonne réponse */
+        .btn-answer.correct-zoom {
+            transform: scale(1.05) rotate(0.5deg);
+            z-index: 40;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Extinction des autres */
+        .btn-answer.fade-out {
+            opacity: 0.15;
+            transform: scale(0.95);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* Panel Contrôle (Suivant) */
+        .control-panel {
+            margin-top: 14px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-next {
+            background: linear-gradient(to right, #00e5ff, #3b82f6);
+            color: #0b030a;
+            font-weight: 900;
+            padding: 8px 24px;
+            font-size: 1rem;
+            border-radius: 9999px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 229, 255, 0.3);
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 30;
+        }
+
+        /* ÉCRAN DE FIN */
+        #result-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            flex-grow: 1;
+            position: relative;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .end-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ff4081;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            margin-bottom: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .end-title { font-size: 2.5rem; }
+        }
+
+        /* PODIUM FINAL */
+        .leaderboard-title {
+            font-size: 1.15rem;
+            color: #00e5ff;
+            text-transform: uppercase;
+            margin: 10px 0;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+        }
+
+        .leaderboard-end {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .final-rank-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .final-rank-card.rank-1 {
+            border-color: #ffca28; /* Or */
+            background: rgba(255, 202, 40, 0.12);
+            box-shadow: 0 0 15px rgba(255, 202, 40, 0.25);
+        }
+
+        .final-rank-card.rank-2 {
+            border-color: #e0e0e0; /* Argent */
+            background: rgba(224, 224, 224, 0.08);
+            box-shadow: 0 0 10px rgba(224, 224, 224, 0.1);
+        }
+
+        .final-rank-card.rank-3 {
+            border-color: #b0bec5; /* Bronze */
+            background: rgba(176, 190, 197, 0.06);
+        }
+
+        .final-rank-badge {
+            font-weight: 900;
+            font-size: 0.85rem;
+            color: #f48fb1;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .final-rank-card.rank-1 .final-rank-badge { color: #ffe082; }
+        .final-rank-card.rank-2 .final-rank-badge { color: #eeeeee; }
+
+        .final-rank-name {
+            font-weight: 800;
+            color: #ffffff;
+            font-size: 0.95rem;
+            flex-grow: 1;
+            text-align: left;
+            margin-left: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .final-rank-score {
+            font-weight: 900;
+            color: #00e5ff;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+        }
+
+        .score-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 64, 129, 0.4);
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 0 12px rgba(255, 64, 129, 0.2), inset 0 0 10px rgba(255, 64, 129, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 14px;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .score-num {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .end-quote {
+            font-size: 0.85rem;
+            color: #f9a8d4;
+            font-style: italic;
+            line-height: 1.4;
+            margin-bottom: 14px;
+            max-width: 450px;
+        }
+
+        .btn-restart {
+            background: linear-gradient(to right, #ff4081, #be185d);
+            color: white;
+            font-weight: 900;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            border-radius: 9999px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 6px 18px rgba(255, 64, 129, 0.4);
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 30;
+        }
+
+        /* ==================== TABLEAU DES SCORES (ÉQUIPES) ==================== */
+        .scoreboard {
+            width: 100%;
+            max-width: 1100px;
+            margin: 12px auto 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            background: rgba(11, 3, 10, 0.85);
+            border: 2px solid rgba(0, 229, 255, 0.4);
+            border-radius: 16px;
+            padding: 10px;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+            position: relative;
+            z-index: 50;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 6px 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .team-card:hover {
+            border-color: rgba(0, 229, 255, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Nom modifiable */
+        .team-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #00e5ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            outline: none;
+            border-bottom: 1px dashed rgba(0, 229, 255, 0.3);
+            padding-bottom: 2px;
+            margin-bottom: 4px;
+            cursor: text;
+        }
+
+        .team-name:focus {
+            border-bottom-style: solid;
+            background: rgba(0, 229, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .team-score {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 2px 0;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .team-controls {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-score {
+            flex: 1;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: white;
+            cursor: pointer;
+            padding: 4px 0;
+            transition: all 0.1s ease;
+        }
+
+        .btn-score-minus {
+            background: linear-gradient(135deg, #f43f5e, #be123c);
+        }
+
+        .btn-score-plus {
+            background: linear-gradient(135deg, #10b981, #047857);
+        }
+
+        .btn-score:active {
+            transform: scale(0.9);
+        }
+
+        /* Légende des raccourcis clavier */
+        .keyboard-legend {
+            grid-column: span 4;
+            text-align: center;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 4px;
+        }
+
+        .keyboard-key {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+            padding: 1px 4px;
+            color: #ffffff;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* TOAST NOTIFICATION */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translate(-50%, 100px);
+            background: #dc2626;
+            border: 2px solid #ffffff;
+            color: white;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+            z-index: 999;
+            text-align: center;
+        }
+
+        #toast.show {
+            transform: translate(-50%, 0);
+        }
+
+        /* Aide pour la télécommande */
+        .presenter-helper {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 8px;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ANIMATIONS KEYFRAMES */
+        @keyframes vinyl-spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes polaroid-float {
+            0% { transform: translateY(0) rotate(-2deg); }
+            100% { transform: translateY(-8px) rotate(2deg); }
+        }
+    
+        /* Horloge / compte à rebours */
+        .timer-display{
+            font-size:2rem;
+            font-weight:900;
+            color:#00e5ff;
+            margin-bottom:14px;
+            text-shadow:0 0 15px rgba(0,229,255,.5);
+            letter-spacing:2px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="intro-screen" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b030a;z-index:10000;">
+    <h1 style="color:white;margin-bottom:25px;font-size:2.2rem;text-align:center;">🎂 Quizz de l'anniversaire de Maud 🎂</h1>
+    <button id="enter-btn" class="btn-primary">Entrer</button>
+</div>
+
+
+    <!-- Aide Présentation (Invisible en Plein Écran) -->
+    <div class="presenter-helper">Clic écran libre / Espace = Révéler / Suivant</div>
+
+    <!-- EN-TÊTE -->
+    <header>
+        <div class="header-left">
+            <div class="vinyl-container">
+                <div class="vinyl-body">
+                    <div class="vinyl-grooves-1"></div>
+                    <div class="vinyl-grooves-2"></div>
+                    <div class="vinyl-center" id="vinyl-area">
+                        <!-- Affichage direct de la photo par défaut -->
+                        <img class="vinyl-img" id="vinyl-img" src="Maud.png" alt="Maud" onerror="handleVinylError()">
+                        <div id="vinyl-fallback" class="vinyl-fallback">M</div>
+                    </div>
+                </div>
+                <div class="vinyl-hole"></div>
+            </div>
+            
+            <div class="header-title-box">
+                <h1>Maud's 50th Birthday Quiz</h1>
+                <div class="header-subtitle">Thème Spécial : GREASE ⚡</div>
+            </div>
+        </div>
+        <button class="btn-fullscreen" onclick="toggleFullscreen()">
+            🖥️ Plein Écran
+        </button>
+    </header>
+
+    <!-- ÉCRAN D'ACCUEIL -->
+    <div id="start-screen">
+        <div class="polaroid-wrapper">
+            <div class="polaroid-card">
+                <div class="polaroid-image-area" id="polaroid-area">
+                    <!-- Affichage direct de la photo par défaut -->
+                    <img class="polaroid-img" id="main-polaroid-img" src="Maud.png" alt="Maud" onerror="handlePolaroidError()">
+                    <div id="polaroid-fallback" class="polaroid-fallback">
+                        <div class="polaroid-fallback-emoji">👩‍🎤</div>
+                        <span class="polaroid-fallback-name">Maud</span>
+                        <span class="polaroid-fallback-sub">Pour afficher sa photo, placez le fichier <b>Maud.png</b> dans le même dossier !</span>
+                    </div>
+                </div>
+                <div class="polaroid-caption">Maud - 50 ans 💖</div>
+            </div>
+            <div class="polaroid-tape"></div>
+        </div>
+
+        <h2 class="welcome-title">Let's Go, Pink Ladies !</h2>
+        <p class="welcome-subtitle">Prêts pour le grand test rock'n'roll ?</p>
+        
+        <button class="btn-primary" onclick="startQuiz()">
+            Lancer le Quiz
+        </button>
+    </div>
+
+    <!-- ZONE DE JEU -->
+    <div id="quiz-container" class="hidden">
+        <div class="progress-box">
+            <span id="progress-text">Question 1 / 15</span>
+            <div class="progress-bar-bg">
+                <div id="progress-bar" class="progress-bar-fill" style="width: 6.6%"></div>
+            </div>
+        </div>
+
+        
+        <div id="timer-display" class="timer-display">20s</div>
+
+        <div class="question-text" id="question">
+            La question s'affiche ici...
+        </div>
+        
+        <div class="answers-grid" id="answers-container">
+            <button class="btn-answer btn-blue" onclick="checkAnswer(0)"></button>
+            <button class="btn-answer btn-green" onclick="checkAnswer(1)"></button>
+            <button class="btn-answer btn-red" onclick="checkAnswer(2)"></button>
+            <button class="btn-answer btn-yellow" onclick="checkAnswer(3)"></button>
+        </div>
+
+        <div class="control-panel">
+            <button class="btn-next hidden" id="next-button" onclick="nextQuestion()">
+                Suivant &gt;
+            </button>
+        </div>
+    </div>
+
+    <!-- ÉCRAN DE FIN -->
+    <div id="result-screen" class="hidden">
+        <h2 class="end-title">Happy 50, Maud ! 🎉</h2>
+        
+        <div class="score-card">
+            <p class="score-label" style="font-size: 0.8rem; color: #67e8f9; font-weight: 700; text-transform: uppercase;">Score de l'Écran</p>
+            <p class="score-num" id="score-text">0 / 15</p>
+        </div>
+
+        <!-- CLASSEMENT FINAL DES ÉQUIPES DYNAMIQUE -->
+        <h3 class="leaderboard-title">🏆 Classement Final des Équipes 🏆</h3>
+        <div class="leaderboard-end" id="final-leaderboard">
+            <!-- Rempli dynamiquement par JavaScript -->
+        </div>
+
+        <p class="end-quote">
+            "You're the one that we want !"<br>
+            Félicitations à tous. Que la fête continue et que le rock'n'roll résonne pour célébrer ce superbe anniversaire !
+        </p>
+
+        <button class="btn-restart" onclick="restartQuiz()">
+            Rejouer le Quiz
+        </button>
+    </div>
+
+    <!-- ==================== TABLEAU DES SCORES DES 4 ÉQUIPES ==================== -->
+    <div class="scoreboard" id="scoreboard">
+        <!-- Équipe 1 -->
+        <div class="team-card">
+            <div class="team-name" contenteditable="true" id="team1-name">Équipe Cindy</div>
+            <div class="team-score" id="team1-score">0</div>
+            <div class="team-controls">
+                <button class="btn-score btn-score-minus" onclick="changeScore(1, -1)">-</button>
+                <button class="btn-score btn-score-plus" onclick="changeScore(1, 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Équipe 2 -->
+        <div class="team-card">
+            <div class="team-name" contenteditable="true" id="team2-name">Équipe Travolta</div>
+            <div class="team-score" id="team2-score">0</div>
+            <div class="team-controls">
+                <button class="btn-score btn-score-minus" onclick="changeScore(2, -1)">-</button>
+                <button class="btn-score btn-score-plus" onclick="changeScore(2, 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Équipe 3 -->
+        <div class="team-card">
+            <div class="team-name" contenteditable="true" id="team3-name">Équipe Pink Ladies</div>
+            <div class="team-score" id="team3-score">0</div>
+            <div class="team-controls">
+                <button class="btn-score btn-score-minus" onclick="changeScore(3, -1)">-</button>
+                <button class="btn-score btn-score-plus" onclick="changeScore(3, 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Équipe 4 -->
+        <div class="team-card">
+            <div class="team-name" contenteditable="true" id="team4-name">Équipe T-Birds</div>
+            <div class="team-score" id="team4-score">0</div>
+            <div class="team-controls">
+                <button class="btn-score btn-score-minus" onclick="changeScore(4, -1)">-</button>
+                <button class="btn-score btn-score-plus" onclick="changeScore(4, 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Légende des touches de raccourcis -->
+        <div class="keyboard-legend">
+            Raccourcis clavier (Animateur) — Ajouter : 
+            <span class="keyboard-key">1</span>, <span class="keyboard-key">2</span>, <span class="keyboard-key">3</span>, <span class="keyboard-key">4</span> | 
+            Retirer : 
+            <span class="keyboard-key">A</span>, <span class="keyboard-key">Z</span>, <span class="keyboard-key">E</span>, <span class="keyboard-key">R</span>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST SANS WIFI -->
+    <div id="toast">Message d'alerte</div>
+
+    
+    <audio id="birthday-audio" src="happy birthday.mp3" preload="auto" loop></audio>
+<audio id="clock-audio" src="horloge time.mp3" preload="auto" loop></audio>
+
+    <script>
+        function handlePolaroidError() {
+            document.getElementById('polaroid-area').classList.add('has-error');
+        }
+
+        function handleVinylError() {
+            document.getElementById('vinyl-area').classList.add('has-error');
+        }
+
+        const quizData = [
+            {
+                question: "Où Danny et Sandy passent-ils de douces vacances d'été avant la rentrée ?",
+                answers: ["À la montagne", "À la plage", "Dans une fête foraine", "Dans un ciné-parc"],
+                correct: 1
+            },
+{
+  question: "Quelle est la date de naissance de Maud ?",
+  answers: ["08 juin 1976", "20 juin 1978", "21 juin 1979", "27 juin 1977"],
+  correct: 0
+},
+            {
+                question: "Comment s'appelle le célèbre gang de filles mené par Rizzo au lycée ?",
+                answers: ["The T-Birds", "The Rydell Girls", "The Pink Ladies", "The Rockettes"],
+                correct: 2
+            },
+ {
+                question: "Qui joue Sandy Olson?",
+                answers: ["Olivia Newton John", "Anette Charles", "Didin Coon", "Martine danseuse"],
+                correct: 0
+            },
+{
+                question: "Pourquoi le film s'intitule ainsi ?",
+                answers: ["A cause de la graisse qu'ils mettent sur leurs cheveux", "car c'est le nom du fast food où ils vont manger", "Cra c'est le nom de la voiture de Danny", "Car c'est la couleur de la chemise de Travolta"],
+                correct: 0
+            },
+ {
+                question: "Completez les paroles   ====>>                         [ I got chills ___________ and I'm losing control ]",
+                answers: ["They're Multifing", "They're Multiplying", "They Electrifing", "They indiving"],
+                correct: 1,
+                correctSound: "multiplying.mp3"
+            },
+            {
+                question: "En quelle année est sorti le film culte Grease au cinéma ?",
+                answers: ["1972", "1975", "1978", "1982"],
+                correct: 2
+            },
+            {
+                question: "Le film Grease est sorti en 1978. Deux ans plus tôt, en 1976 (l'année de naissance de Maud !), qui écrivait le futur titre 'Grease' chanté par Frankie Valli ?",
+                answers: ["John Travolta", "Les Bee Gees (Barry Gibb)", "Elvis Presley", "Les Beatles"],
+                correct: 1
+            },
+            {
+                question: "Quel acteur légendaire incarne le séduisant et rebelle Danny Zuko ?",
+                answers: ["John Travolta", "Patrick Swayze", "Lionel Sacomani ", "Al Pacino"],
+                correct: 0
+            },
+            {
+                question: "De quel pays lointain la douce Sandy Olsson arrive-t-elle au début du film ?",
+                answers: ["De France", "D'Australie", "D'Angleterre", "Du Canada"],
+                correct: 1
+            },
+            {
+                question: "Quelle voiture emblématique les garçons retapent-ils avec passion dans le garage ?",
+                answers: ["La Thunderbird Coupe", "La Cadillac Rose", "La Greased Lightnin'", "La Mustang Fastback"],
+                correct: 2
+            },
+            {
+                question: "Quelle est la boisson star adorée des personnages au 'Frosty Palace' ?",
+                answers: ["Le Coca-Cola", "Le Milkshake", "La Limonade", "Le Café"],
+                correct: 1
+            },
+                        {
+                question: "Quel produit indispensable les T-Birds mettent-ils dans leurs cheveux pour leur coiffure 'banane' ?",
+                answers: ["Du gel de couleur", "De la laque extra-forte", "De la brillantine (grease)", "De l'huile de coco"],
+                correct: 2
+            },
+            {
+                question: "Avec quelle danseuse aguerrie Danny gagne-t-il le grand concours de danse télévisé ?",
+                answers: ["Sandy Olsson", "Rizzo", "Cha-Cha DiGregorio", "Frenchy"],
+                correct: 2
+            },
+            {
+                question: "Quelle tenue iconique Sandy arbore-t-elle lors de la scène finale de la fête foraine ?",
+                answers: ["Une robe de bal rose", "Un ensemble en cuir noir ultra-moulant", "Un pull jaune et une jupe blanche", "Un jean bleu et un t-shirt blanc"],
+                correct: 1
+            },
+            {
+                question: "Quelle chanson tendre et mélancolique Sandy chante-t-elle seule dans le jardin ?",
+                answers: ["Summer Nights", "Look at Me, I'm Sandra Dee", "Hopelessly Devoted to You", "Sandy"],
+                correct: 2
+            },
+            {
+                question: "Quelle Pink Lady rêve de d'ouvrir un salon mais rate sa coloration en devenant rose ?",
+                answers: ["Marty", "Frenchy", "Jan", "Rizzo"],
+                correct: 1
+            },
+            {
+                question: "Quel est le nom du gang rival des T-Birds avec qui ils font la course de voitures ?",
+                answers: ["The Scorpions", "The Sharks", "The Cobras", "The Rydell Rebels"],
+                correct: 0
+            },
+            {
+                question: "Pour fêter les 50 ans de Maud, Danny Zuko nous rappelle que l'âge n'est qu'un chiffre ! Quel âge avait John Travolta lors du tournage de ce lycéen ?",
+                answers: ["16 ans", "18 ans", "23 ans", "29 ans"],
+                correct: 2
+            },
+            {
+                question: "Quel est le nom du lycée où se déroule l'histoire ?",
+                answers: ["Rydell High", "Grease High", "Beverly High", "West Side High"],
+                correct: 0
+            },
+            {
+                question: "Quelle est la chanson finale iconique du film ?",
+                answers: ["Grease", "You're the One That I Want", "Summer Nights", "We Go Together"],
+                correct: 1
+            },
+            {
+                question: "Comment les T-Birds appellent-ils affectueusement leur voiture retapée ?",
+                answers: ["The Beauty", "The Silver Bullet", "Greased Lightnin'", "The Rocker"],
+                correct: 2
+            },
+            {
+                question: "Quelle chanson les Pink Ladies chantent-elles pour se moquer de Sandy ?",
+                answers: ["Look at Me, I'm Sandra Dee", "Freddy My Love", "Mooning", "Rock 'n' Roll Party Queen"],
+                correct: 0
+            },
+            {
+                question: "Pour finir en beauté : combien d'années de bonheur Maud célèbre-t-elle aujourd'hui ?",
+                answers: ["30 ans", "40 ans", "50 ans", "60 ans"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Variables des scores d'équipes
+        const teamScores = {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0
+        };
+
+        const startScreen = document.getElementById('start-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionElement = document.getElementById('question');
+        const progressTextElement = document.getElementById('progress-text');
+        const progressBarElement = document.getElementById('progress-bar');
+        const answerButtons = document.querySelectorAll('.btn-answer');
+        const nextButton = document.getElementById('next-button');
+        const scoreText = document.getElementById('score-text');
+        const toastElement = document.getElementById('toast');
+        const leaderboardEnd = document.getElementById('final-leaderboard');
+
+        const correctSound = new Audio('correct.mp3');
+        const incorrectSound = new Audio('incorrect.mp3');
+
+        const birthdayAudio = document.getElementById('birthday-audio');
+        const clockAudio = document.getElementById('clock-audio');
+        const timerDisplay = document.getElementById('timer-display');
+        let timerInterval = null;
+        let timeLeft = 45;
+
+        function startQuestionTimer(){
+            clearInterval(timerInterval);
+            timeLeft = 45;
+            timerDisplay.innerText = timeLeft + 's';
+
+            try{
+                clockAudio.currentTime = 0;
+                clockAudio.play().catch(()=>{});
+            }catch(e){}
+
+            timerInterval = setInterval(()=>{
+                timeLeft--;
+                timerDisplay.innerText = Math.max(0,timeLeft) + 's';
+
+                if(timeLeft <= 0){
+                    clearInterval(timerInterval);
+                    clockAudio.pause();
+                    revealCorrectAnswer();
+                }
+            },1000);
+        }
+
+        function stopQuestionTimer(){
+            clearInterval(timerInterval);
+            clockAudio.pause();
+            clockAudio.currentTime = 0;
+        }
+
+
+        correctSound.preload = 'auto';
+        incorrectSound.preload = 'auto';
+
+        function changeScore(teamId, delta) {
+            teamScores[teamId] = Math.max(0, teamScores[teamId] + delta);
+            document.getElementById(`team${teamId}-score`).innerText = teamScores[teamId];
+        }
+
+        function startQuiz() {
+            birthdayAudio.pause(); birthdayAudio.currentTime=0;
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            currentQuestionIndex = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            let currentQuestion = quizData[currentQuestionIndex];
+            
+            const progressPercent = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            progressTextElement.innerText = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
+            progressBarElement.style.width = `${progressPercent}%`;
+
+            questionElement.innerText = currentQuestion.question;
+
+            answerButtons.forEach((button, index) => {
+                button.innerText = currentQuestion.answers[index];
+            });
+
+            startQuestionTimer();
+        }
+
+        function resetState() {
+            nextButton.classList.add('hidden');
+            answerButtons.forEach(button => {
+                button.classList.remove('correct-zoom', 'fade-out', 'disabled');
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            let currentQuestion = quizData[currentQuestionIndex];
+            let correctIndex = currentQuestion.correct;
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                correctSound.currentTime = 0;
+                correctSound.play().catch(() => {});
+            } else {
+                incorrectSound.currentTime = 0;
+                incorrectSound.play().catch(() => {});
+            }
+
+            revealCorrectAnswer();
+        }
+
+        function revealCorrectAnswer() {
+            stopQuestionTimer();
+            correctSound.currentTime = 0;
+            correctSound.play().catch(() => {});
+            let currentQuestion = quizData[currentQuestionIndex];
+            let correctIndex = currentQuestion.correct;
+
+            answerButtons.forEach((button, index) => {
+                button.classList.add('disabled');
+                
+                if (index === correctIndex) {
+                    button.classList.add('correct-zoom');
+                } else {
+                    button.classList.add('fade-out');
+                }
+            });
+
+            if (currentQuestionIndex < quizData.length - 1) {
+                nextButton.classList.remove('hidden');
+            } else {
+                setTimeout(showResults, 2500);
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        /* */
+        function showResults() {
+            stopQuestionTimer();
+            quizContainer.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            scoreText.innerText = `${score} / ${quizData.length}`;
+
+            // Récupérer les noms écrits en direct par l'utilisateur
+            const t1Name = document.getElementById('team1-name').innerText.trim() || "Équipe 1";
+            const t2Name = document.getElementById('team2-name').innerText.trim() || "Équipe 2";
+            const t3Name = document.getElementById('team3-name').innerText.trim() || "Équipe 3";
+            const t4Name = document.getElementById('team4-name').innerText.trim() || "Équipe 4";
+
+            // Stocker les équipes dans un tableau pour le tri
+            const teams = [
+                { id: 1, name: t1Name, score: teamScores[1] },
+                { id: 2, name: t2Name, score: teamScores[2] },
+                { id: 3, name: t3Name, score: teamScores[3] },
+                { id: 4, name: t4Name, score: teamScores[4] }
+            ];
+
+            // Tri par score décroissant
+            teams.sort((a, b) => b.score - a.score);
+
+            // Construction du code HTML du podium
+            let leaderboardHTML = '';
+            let currentRank = 1;
+
+            for (let i = 0; i < teams.length; i++) {
+                // Détection de l'ex æquo avec l'élément précédent
+                if (i > 0 && teams[i].score < teams[i - 1].score) {
+                    currentRank = i + 1;
+                }
+
+                // Vérifier si d'autres partagent le même score pour ajouter la mention ex æquo
+                const countWithSameScore = teams.filter(t => t.score === teams[i].score).length;
+                const isTie = countWithSameScore > 1;
+                const tieText = isTie ? " (Ex æquo)" : "";
+
+                // Sélection de l'émoticône et mise en forme du rang
+                let badge = '🎗️ ';
+                let rankStr = `${currentRank}e`;
+
+                if (currentRank === 1) {
+                    badge = '🥇 ';
+                    rankStr = '1er';
+                } else if (currentRank === 2) {
+                    badge = '🥈 ';
+                } else if (currentRank === 3) {
+                    badge = '🥉 ';
+                }
+
+                leaderboardHTML += `
+                    <div class="final-rank-card rank-${currentRank}">
+                        <span class="final-rank-badge">${badge}${rankStr}${tieText}</span>
+                        <span class="final-rank-name">${teams[i].name}</span>
+                        <span class="final-rank-score">${teams[i].score} pts</span>
+                    </div>
+                `;
+            }
+
+            leaderboardEnd.innerHTML = leaderboardHTML;
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+
+        function showToast(message) {
+            toastElement.innerText = message;
+            toastElement.classList.add('show');
+            setTimeout(() => {
+                toastElement.classList.remove('show');
+            }, 3000);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    showToast(`Impossible d'activer le plein écran : ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function handleGlobalTrigger() {
+            // Écran de départ -> Lancer le quiz
+            if (!startScreen.classList.contains('hidden')) {
+                startQuiz();
+            } 
+            // Écran de jeu actif
+            else if (!quizContainer.classList.contains('hidden')) {
+                const alreadyRevealed = answerButtons[0].classList.contains('disabled');
+                
+                if (!alreadyRevealed) {
+                    revealCorrectAnswer();
+                } else {
+                    if (!nextButton.classList.contains('hidden')) {
+                        nextQuestion();
+                    }
+                }
+            } 
+            // Écran final -> Recommencer le quiz
+            else if (!resultScreen.classList.contains('hidden')) {
+                restartQuiz();
+            }
+        }
+
+        window.addEventListener('keydown', function(e) {
+            // Si l'utilisateur est en train d'écrire ou renommer une équipe, on ignore les touches du quiz
+            if (document.activeElement.getAttribute('contenteditable') === 'true') {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+
+            // Raccourcis pour ajouter des points (1, 2, 3, 4 ou & , é , " , ')
+            if (key === '1' || e.code === 'Digit1') { changeScore(1, 1); e.preventDefault(); }
+            else if (key === '2' || e.code === 'Digit2') { changeScore(2, 1); e.preventDefault(); }
+            else if (key === '3' || e.code === 'Digit3') { changeScore(3, 1); e.preventDefault(); }
+            else if (key === '4' || e.code === 'Digit4') { changeScore(4, 1); e.preventDefault(); }
+
+            // Raccourcis pour retirer des points (A, Z, E, R)
+            else if (key === 'a') { changeScore(1, -1); e.preventDefault(); }
+            else if (key === 'z') { changeScore(2, -1); e.preventDefault(); }
+            else if (key === 'e') { changeScore(3, -1); e.preventDefault(); }
+            else if (key === 'r') { changeScore(4, -1); e.preventDefault(); }
+
+            // Barre d'espace pour la télécommande du présentateur
+            else if (e.code === 'Space' || e.key === ' ') {
+                e.preventDefault();
+                handleGlobalTrigger();
+            }
+        });
+
+        // Écouteur de clic général (Évite de déclencher si on clique sur les contrôles des scores)
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('button') || e.target.closest('.team-card') || e.target.closest('.keyboard-legend')) {
+                return;
+            }
+            handleGlobalTrigger();
+        });
+    
+document.getElementById('enter-btn').addEventListener('click', function(){
+    document.getElementById('intro-screen').style.display='none';
+    birthdayAudio.play().catch(()=>{});
+});
+</script>
+</body>
+</html>
